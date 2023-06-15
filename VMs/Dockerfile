@@ -1,4 +1,4 @@
-# This dockerfile builds a container that pulls down and runs the latest version of Benchmark
+# docker build --tag gbenson/owasp-benchmark:latest --file VMs/Dockerfile .
 FROM ubuntu:jammy
 
 RUN apt-get update
@@ -20,13 +20,18 @@ RUN git clone https://github.com/gbenson/owasp-benchmark-utils.git BenchmarkUtil
 WORKDIR /owasp/BenchmarkUtils
 RUN mvn install
 
-# Download, build BenchmarkJava
+# Incorporate current checkout as /owasp/BenchmarkJava
 WORKDIR /owasp
-RUN git clone https://github.com/OWASP-Benchmark/BenchmarkJava
+RUN mkdir /owasp/BenchmarkJava
+COPY . BenchmarkJava
 
 # Workaround for security fix for CVE-2022-24765
 RUN git config --global --add safe.directory /owasp/BenchmarkJava
 
+# Make Spotless ratchet against local checkout's main branch
+RUN sed -i 's,origin/master,main,g' BenchmarkJava/pom.xml
+
+# Build BenchmarkJava
 WORKDIR /owasp/BenchmarkJava
 RUN mvn clean package cargo:install
 

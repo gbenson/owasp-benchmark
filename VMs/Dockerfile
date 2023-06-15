@@ -1,6 +1,5 @@
 # This dockerfile builds a container that pulls down and runs the latest version of Benchmark
 FROM ubuntu:latest
-MAINTAINER "Dave Wichers dave.wichers@owasp.org"
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata

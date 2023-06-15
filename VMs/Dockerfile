@@ -20,19 +20,12 @@ RUN git clone https://github.com/gbenson/owasp-benchmark-utils.git BenchmarkUtil
 WORKDIR /owasp/BenchmarkUtils
 RUN mvn install
 
-# Incorporate current checkout as /owasp/BenchmarkJava
+# Incorporate and build current checkout as /owasp/BenchmarkJava
 WORKDIR /owasp
 RUN mkdir /owasp/BenchmarkJava
-COPY . BenchmarkJava
-
-# Workaround for security fix for CVE-2022-24765
-RUN git config --global --add safe.directory /owasp/BenchmarkJava
-
-# Make Spotless ratchet against local checkout's main branch
-RUN sed -i 's,origin/master,main,g' BenchmarkJava/pom.xml
-
-# Build BenchmarkJava
 WORKDIR /owasp/BenchmarkJava
+COPY . .
+RUN python3 VMs/disable-spotless.py
 RUN mvn clean package cargo:install
 
 RUN useradd -d /home/bench -m -s /bin/bash bench 

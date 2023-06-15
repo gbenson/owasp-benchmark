@@ -46,3 +46,7 @@ ENV PATH /owasp/BenchmarkJava:$PATH
 WORKDIR /owasp/BenchmarkJava
 RUN timeout 60 ./runBenchmark.sh; exit 0
 
+# Set up to run like this:
+# docker run --rm -it -p 8443:8443 gbenson/owasp-benchmark
+EXPOSE 8443
+CMD ["./runRemoteAccessibleBenchmark.sh"]

@@ -16,7 +16,7 @@ RUN mkdir /owasp
 WORKDIR /owasp
 
 # Download, build, install Benchmark Utilities required by crawler and scorecard generation
-RUN git clone https://github.com/OWASP-Benchmark/BenchmarkUtils.git
+RUN git clone https://github.com/gbenson/owasp-benchmark-utils.git BenchmarkUtils
 WORKDIR /owasp/BenchmarkUtils
 RUN mvn install
 
